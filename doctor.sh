@@ -84,7 +84,27 @@ else
   ok "no alias collisions across domain repos"
 fi
 
-# --- 5. aliases pointing at files inside the repos that no longer exist ------
+# --- 5. the same command aliased under two different names -------------------
+# Not a shadowing bug, but it means two names drifted apart from one intent —
+# how one alias file ends up with a near-twin of another's.
+dupes="$(
+  for repo in "${repos[@]:-}" "$REPO_DIR"; do
+    [ -d "$repo" ] || continue
+    grep -rhE '^alias [A-Za-z0-9_.-]+=' "$repo" --exclude-dir=.git 2>/dev/null |
+      sed -E 's/^alias ([A-Za-z0-9_.-]+)=(.*)$/\2\t\1/'
+  done | sort -u | awk -F'\t' '
+    $1 == prev { print prevname " == " $2 }
+    { prev = $1; prevname = $2 }'
+)"
+if [ -n "$dupes" ]; then
+  while read -r d; do
+    [ -n "$d" ] && fail "same command under two alias names: $d"
+  done <<< "$dupes"
+else
+  ok "no duplicated alias commands"
+fi
+
+# --- 6. aliases pointing at files inside the repos that no longer exist ------
 # Only files (by extension) are checked; directory aliases legitimately point
 # at project checkouts that vary per machine.
 for repo in "${repos[@]:-}" "$REPO_DIR"; do
@@ -99,7 +119,7 @@ for repo in "${repos[@]:-}" "$REPO_DIR"; do
              grep -E '\.(sh|zsh|json|conf)$' | sort -u)
 done
 
-# --- 6. core.excludesFile must stay unset -----------------------------------
+# --- 7. core.excludesFile must stay unset -----------------------------------
 # Setting it shadows ~/.config/git/ignore, which is where base installs the
 # global excludes. An explicit value is also an absolute path that silently
 # points at nothing on the next machine.
