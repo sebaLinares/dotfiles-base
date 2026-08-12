@@ -79,6 +79,9 @@ export NVM_DIR="$HOME/.nvm"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
+# Base's own aliases. Self-locating, so this works from any clone path.
+source "${${(%):-%x}:A:h}/.aliases"
+
 for fragment in "$HOME"/.config/dotfiles/*.zsh(N); do
   source "$fragment"
 done

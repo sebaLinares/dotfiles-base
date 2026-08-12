@@ -22,7 +22,7 @@ fi
 # Domain repos find this repo — and lib/install-common.sh — through base.env.
 # Rewritten every run, so moving the clone is picked up on reinstall.
 mkdir -p "$HOME/.config/dotfiles"
-printf 'DOTFILES_BASE=%s\n' "$REPO_DIR" > "$HOME/.config/dotfiles/base.env"
+printf 'DOTFILES_BASE="%s"\n' "$REPO_DIR" > "$HOME/.config/dotfiles/base.env"
 echo "wrote ~/.config/dotfiles/base.env -> $REPO_DIR"
 
 # Global git excludes. git reads ~/.config/git/ignore by default; an explicit

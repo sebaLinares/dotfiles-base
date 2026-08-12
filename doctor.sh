@@ -42,7 +42,7 @@ done
 if [ ! -f "$FRAGMENT_DIR/base.env" ]; then
   fail "missing ~/.config/dotfiles/base.env — run base's install.sh"
 else
-  recorded="$(sed -n 's/^DOTFILES_BASE=//p' "$FRAGMENT_DIR/base.env")"
+  recorded="$(sed -n 's/^DOTFILES_BASE=//p' "$FRAGMENT_DIR/base.env" | tr -d '"')"
   if [ "$recorded" != "$REPO_DIR" ]; then
     fail "base.env points at $recorded, but this clone is $REPO_DIR"
   elif [ ! -f "$recorded/lib/install-common.sh" ]; then
@@ -65,9 +65,10 @@ fi
 
 # --- 4. alias names defined in more than one repo ---------------------------
 # Lexical fragment load order decides the winner silently, so a collision
-# means one repo is quietly overriding the other.
+# means one repo is quietly overriding the other. Base is included: it loads
+# before every fragment, so a domain silently wins over base too.
 pairs="$(
-  for repo in "${repos[@]:-}"; do
+  for repo in "${repos[@]:-}" "$REPO_DIR"; do
     [ -d "$repo" ] || continue
     grep -rhoE '^alias [A-Za-z0-9_.-]+' "$repo" --exclude-dir=.git 2>/dev/null |
       awk -v r="$(basename "$repo")" '{print $2"\t"r}'
