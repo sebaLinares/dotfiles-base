@@ -138,10 +138,13 @@ checks that class:
 1. Every installed symlink resolves, and base still owns its files.
 2. `base.env` exists, matches this clone, and its target has `lib/`.
 3. Domain repos behind the fragments are reachable.
-4. No alias name is defined in two domain repos — lexical load order picks the
-   winner silently, so a collision means one repo quietly overrides another.
-5. No alias points at a file inside a repo that no longer exists.
-6. `core.excludesFile` is unset. Setting it shadows `~/.config/git/ignore`
+4. No alias name is defined in two repos — lexical load order picks the winner
+   silently, so a collision means one repo quietly overrides another. Base is
+   included, since it loads before every fragment.
+5. The same command is not aliased under two different names — that is how one
+   alias file ends up with a near-twin of another's.
+6. No alias points at a file inside a repo that no longer exists.
+7. `core.excludesFile` is unset. Setting it shadows `~/.config/git/ignore`
    silently, and its value is an absolute path that means nothing on the next
    machine.
 

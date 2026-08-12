@@ -21,6 +21,7 @@ prompt pure
 unalias glo 2>/dev/null
 
 export LANG=en_US.UTF-8
+export EDITOR='nvim'
 
 eval $(thefuck --alias)
 
