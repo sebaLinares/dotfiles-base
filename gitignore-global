@@ -1,0 +1,7 @@
+# Generic tooling noise, ignored in every repo on the machine.
+# Symlinked to ~/.config/git/ignore by install.sh — git reads that path by
+# default, so no core.excludesFile setting is needed (or wanted: an explicit
+# one is an absolute path that breaks on the next machine).
+
+.cursorrules
+**/.claude/settings.local.json

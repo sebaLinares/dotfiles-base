@@ -5,21 +5,7 @@
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-link() {
-  local src="$1" dest="$2"
-  if [ -L "$dest" ] && [ "$(readlink "$dest")" = "$src" ]; then
-    echo "ok: $dest already linked"
-    return
-  fi
-  if [ -e "$dest" ] || [ -L "$dest" ]; then
-    local backup="${dest}.bak-$(date +%Y%m%d%H%M%S)"
-    echo "backing up existing $dest -> $backup"
-    mv "$dest" "$backup"
-  fi
-  ln -s "$src" "$dest"
-  echo "linked $dest -> $src"
-}
+source "$REPO_DIR/lib/install-common.sh"
 
 link "$REPO_DIR/.zshrc" "$HOME/.zshrc"
 link "$REPO_DIR/.tmux.conf" "$HOME/.tmux.conf"
@@ -32,6 +18,17 @@ if ! grep -q 'Include ~/.ssh/config.d/\*.conf' "$HOME/.ssh/config"; then
   printf '\nInclude ~/.ssh/config.d/*.conf\n' >> "$HOME/.ssh/config"
   echo "appended Include line to ~/.ssh/config"
 fi
+
+# Domain repos find this repo — and lib/install-common.sh — through base.env.
+# Rewritten every run, so moving the clone is picked up on reinstall.
+mkdir -p "$HOME/.config/dotfiles"
+printf 'DOTFILES_BASE=%s\n' "$REPO_DIR" > "$HOME/.config/dotfiles/base.env"
+echo "wrote ~/.config/dotfiles/base.env -> $REPO_DIR"
+
+# Global git excludes. git reads ~/.config/git/ignore by default; an explicit
+# core.excludesFile would shadow this silently, so doctor.sh checks for one.
+mkdir -p "$HOME/.config/git"
+link "$REPO_DIR/gitignore-global" "$HOME/.config/git/ignore"
 
 if [ ! -f "$HOME/.gitconfig" ]; then
   touch "$HOME/.gitconfig"
