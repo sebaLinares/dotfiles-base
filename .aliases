@@ -1,0 +1,5 @@
+# Generic tool aliases: no identity, no client, useful on any machine.
+# Domain repos must not redefine these — doctor.sh reports collisions.
+
+alias tfplan="terraform plan --out=tfplan"
+alias tfapply="terraform apply tfplan"
