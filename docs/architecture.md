@@ -103,8 +103,8 @@ move between machines out of band.
 ## Quickstart
 
 ```bash
-# base, always first
-git clone <base-remote> ~/Documents/.dotfiles-base
+# base, always first — public, so clone over HTTPS: no key, no SSH host alias
+git clone <base-https-remote> ~/Documents/.dotfiles-base
 ~/Documents/.dotfiles-base/install.sh
 
 # then any domain, in any order (see that repo's README for its remote)
@@ -115,6 +115,14 @@ exec zsh
 ```
 
 Base alone gives a working shell and tmux with no identity attached.
+
+**Clone base over HTTPS, domains over SSH.** Base is public, so HTTPS needs no
+credential and no `Host` alias — which is what lets it be the first thing
+installed on a machine that has no keys yet, including a machine where a
+personal SSH key would not belong. Domain repos are private and identity-bound,
+so they use SSH with whatever `Host` alias that identity is configured under.
+The clone path above is a convention, not a requirement: nothing is hardcoded,
+so a clone may live anywhere (see `docs/decisions/fragments-self-locate.md`).
 
 **Removing a domain:**
 

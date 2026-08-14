@@ -1,0 +1,2 @@
+# Agent-local settings; never shared.
+.claude/settings.local.json
