@@ -12,9 +12,9 @@ cross-agent standard — read by Claude Code (via the `CLAUDE.md` symlink), Code
 and anything else that reads `AGENTS.md` at a repo root. Nothing here is tied to
 an agent vendor.
 
-This repo is **`dotfiles-base`**. It owns the generic shell/tmux/git config every
-machine gets, and it owns the **seams** between itself and the domain repos
-(personal, work, a client, …) that plug into it. Read
+This repo is **`dotfiles-base`**. It owns the generic shell/tmux/git/Herdr
+config every machine gets, and it owns the **seams** between itself and the
+domain repos (personal, work, a client, …) that plug into it. Read
 [`docs/architecture.md`](docs/architecture.md) before touching anything.
 
 ## Operating principle
@@ -60,9 +60,9 @@ Invariants. They hold at every moment, not just at review time.
   owner. Domain repos source it; they never copy it. Do not reintroduce a
   per-repo copy of `link()`.
 - **MUST** run `./doctor.sh` after changing any seam — `install.sh`, `lib/`,
-  `.zshrc`'s fragment loop, `base.env`, the `ssh/config.d` bootstrap, or
-  `.aliases` — and paste the result. A change to a seam that has not been
-  doctored is not finished.
+  `.zshrc`'s fragment loop, `base.env`, the `ssh/config.d` bootstrap,
+  base-owned symlinks, or `.aliases` — and paste the result. A change to a seam
+  that has not been doctored is not finished.
 - **MUST NOT** make `doctor.sh` mutate state, install itself, or run from a
   hook. It reports; the human decides.
   *(See [ADR doctor-reports-never-mutates](docs/decisions/doctor-reports-never-mutates.md).)*

@@ -10,6 +10,9 @@ source "$REPO_DIR/lib/install-common.sh"
 link "$REPO_DIR/.zshrc" "$HOME/.zshrc"
 link "$REPO_DIR/.tmux.conf" "$HOME/.tmux.conf"
 
+mkdir -p "$HOME/.config/herdr"
+link "$REPO_DIR/herdr/config.toml" "$HOME/.config/herdr/config.toml"
+
 mkdir -p "$HOME/.ssh/config.d"
 chmod 700 "$HOME/.ssh/config.d"
 

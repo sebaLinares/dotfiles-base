@@ -38,6 +38,15 @@ for l in "$HOME/.zshrc" "$HOME/.tmux.conf" "$HOME/.config/git/ignore"; do
   fi
 done
 
+herdr_config="$HOME/.config/herdr/config.toml"
+if [ ! -L "$herdr_config" ]; then
+  fail "not a symlink (base should own it): ${herdr_config/#$HOME/\~}"
+elif [ "$(readlink "$herdr_config")" != "$REPO_DIR/herdr/config.toml" ]; then
+  fail "${herdr_config/#$HOME/\~} points outside this base clone -> $(readlink "$herdr_config")"
+else
+  ok "base owns ${herdr_config/#$HOME/\~}"
+fi
+
 # --- 2. base.env is present and accurate ------------------------------------
 if [ ! -f "$FRAGMENT_DIR/base.env" ]; then
   fail "missing ~/.config/dotfiles/base.env — run base's install.sh"

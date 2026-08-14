@@ -42,6 +42,8 @@ Base owns the seam. Concretely, base owns:
 - **`~/.ssh/config.d/`** and the `Include` line — domains drop a `.conf` in.
 - **`~/.zshrc`, `~/.tmux.conf`, `~/.config/git/ignore`** — symlinked outright;
   base is the only repo that touches them.
+- **`~/.config/herdr/config.toml`** — generic Herdr preferences; plugin state
+  remains machine-specific.
 - **`.aliases`** — aliases generic enough to belong on any machine.
 - **`docs/architecture.md`** and `docs/decisions/` — the cross-repo contract.
 - **`doctor.sh`** — the checks over all of the above.

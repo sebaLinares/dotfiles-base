@@ -1,8 +1,8 @@
 # Dotfiles architecture: base + domain repos
 
-This repo is `dotfiles-base`. It owns the generic shell/tmux/git config that
-every machine gets, and it owns the **seams** — the shared install code, the
-extension points, and the checks that keep the pieces honest.
+This repo is `dotfiles-base`. It owns the generic shell/tmux/git/Herdr config
+that every machine gets, and it owns the **seams** — the shared install code,
+the extension points, and the checks that keep the pieces honest.
 
 Around it sit any number of **domain repos** (personal, work, a client, …),
 each holding only what is specific to one identity. A machine clones base plus
@@ -20,6 +20,7 @@ machine that actually runs the thing it describes.
 |---|---|
 | `~/.zshrc`, `~/.tmux.conf` | symlinked outright; the only repo that touches them |
 | `~/.config/git/ignore` | symlinked to `gitignore-global`; generic tooling noise |
+| `~/.config/herdr/config.toml` | symlinked to `herdr/config.toml`; generic Herdr preferences |
 | `~/.config/dotfiles/` | extension point — domains drop `<domain>.zsh` here |
 | `~/.config/dotfiles/base.env` | records this clone's path so domains can find `lib/` |
 | `~/.ssh/config.d/` | created + `Include` line appended to `~/.ssh/config` |
@@ -71,7 +72,7 @@ flowchart TB
     end
 
     subgraph BASE["dotfiles-base — public, no identity"]
-        B["~/.zshrc, ~/.tmux.conf (owned)<br/>~/.config/git/ignore (owned)<br/>lib/install-common.sh<br/>base.env + fragment dir<br/>ssh/config.d bootstrap<br/>doctor.sh"]
+        B["~/.zshrc, ~/.tmux.conf (owned)<br/>~/.config/git/ignore (owned)<br/>~/.config/herdr/config.toml (owned)<br/>lib/install-common.sh<br/>base.env + fragment dir<br/>ssh/config.d bootstrap<br/>doctor.sh"]
     end
 
     subgraph DA["domain repo A — private"]
@@ -114,7 +115,9 @@ git clone <domain-remote> ~/Documents/.dotfiles-<domain>
 exec zsh
 ```
 
-Base alone gives a working shell and tmux with no identity attached.
+Base alone gives a working shell and tmux plus generic Herdr preferences, with
+no identity attached. Herdr plugins are installed separately because their
+generated metadata is machine-specific.
 
 **Clone base over HTTPS, domains over SSH.** Base is public, so HTTPS needs no
 credential and no `Host` alias — which is what lets it be the first thing

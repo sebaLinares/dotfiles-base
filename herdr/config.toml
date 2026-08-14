@@ -1,0 +1,34 @@
+onboarding = false
+
+[theme]
+# Ported from tmux: catppuccin/tmux plugin, @catppuccin_flavor "mocha"
+name = "catppuccin"
+auto_switch = true
+dark_name = "catppuccin"
+light_name = "catppuccin-latte"
+
+[keys]
+# Ported from ~/.tmux.conf: set -g prefix C-s
+prefix = "ctrl+s"
+# tmux: bind % / bind | -> split-window -h (side-by-side, vertical divider)
+split_vertical = "prefix+|"
+# tmux: bind - / bind '"' -> split-window -v (stacked, horizontal divider)
+# already herdr's default ("prefix+minus"); listed for parity with tmux config
+split_horizontal = "prefix+minus"
+# focus_pane_left/down/up/right already default to prefix+h/j/k/l,
+# matching tmux's `bind-key h/j/k/l select-pane -L/-D/-U/-R`
+# new_tab already defaults to prefix+c, matching tmux's `bind c new-window`
+
+# Sessionizer is installed separately; plugins.json is machine-specific.
+[[keys.command]]
+key = "prefix+f"
+type = "plugin_action"
+command = "sessionizer.open"
+description = "open project workspace"
+
+[ui.sound]
+enabled = true
+
+[ui]
+redraw_on_focus_gained = false
+prompt_new_tab_name = false
