@@ -128,7 +128,26 @@ for repo in "${repos[@]:-}" "$REPO_DIR"; do
              grep -E '\.(sh|zsh|json|conf)$' | sort -u)
 done
 
-# --- 7. core.excludesFile must stay unset -----------------------------------
+# --- 7. aliases whose target command is not on PATH --------------------------
+# An alias is a shortcut, never an implementation. The command it runs must
+# exist as a real executable, or the alias works when typed and vanishes for
+# everything running in a non-interactive shell -- scripts, git hooks, coding
+# agents -- which then report the command as missing rather than as aliased.
+# Targets that are paths are check 6's job and are skipped here.
+for repo in "${repos[@]:-}" "$REPO_DIR"; do
+  [ -d "$repo" ] || continue
+  while IFS=$'\t' read -r name target; do
+    [ -n "$target" ] || continue
+    case "$target" in
+      '~'*|/*|'$'*|.*) continue ;;
+    esac
+    command -v "$target" >/dev/null 2>&1 ||
+      fail "alias '$name' runs '$target', which is not on PATH (in $(basename "$repo"))"
+  done < <(grep -rhE '^alias [A-Za-z0-9_.-]+=' "$repo" --exclude-dir=.git 2>/dev/null |
+             sed -E 's/^alias ([A-Za-z0-9_.-]+)=["'"'"']?([^ "'"'"';|&]+).*/\1\t\2/' | sort -u)
+done
+
+# --- 8. core.excludesFile must stay unset -----------------------------------
 # Setting it shadows ~/.config/git/ignore, which is where base installs the
 # global excludes. An explicit value is also an absolute path that silently
 # points at nothing on the next machine.
