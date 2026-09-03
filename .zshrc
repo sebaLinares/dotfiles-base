@@ -61,9 +61,8 @@ export PATH="/opt/homebrew/opt/postgresql@15/bin:$PATH"
 
 export PATH="$HOME/.local/bin:$PATH"
 
-# ---- keep PATH unique; ensure ~/tools/bin is first
+# ---- keep PATH unique
 typeset -U path PATH
-path=($HOME/tools/bin $path)
 
 ## Go bin
 export PATH="$HOME/go/bin:$PATH"
