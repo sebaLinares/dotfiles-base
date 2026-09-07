@@ -3,7 +3,7 @@ onboarding = false
 [theme]
 # Ported from tmux: catppuccin/tmux plugin, @catppuccin_flavor "mocha"
 name = "catppuccin"
-auto_switch = true
+auto_switch = false
 dark_name = "catppuccin"
 light_name = "catppuccin-latte"
 
