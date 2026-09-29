@@ -32,3 +32,4 @@ enabled = true
 [ui]
 redraw_on_focus_gained = false
 prompt_new_tab_name = false
+agent_panel_sort = "priority"
